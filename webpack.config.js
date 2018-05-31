@@ -4,6 +4,14 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 
+var entrys = {};
+
+var htmlUrl = path.join(__dirname, 'src/html');
+var jsUrl = path.join(__dirname, 'src/js');
+var result = fs.readdirSync(htmlUrl);
+result = (result instanceof Array) ? result : [];
+console.log(result)
+
 
 module.exports = {
   entry: {
