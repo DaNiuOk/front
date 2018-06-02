@@ -1,8 +1,10 @@
-let path = require('path');
-let fs = require('fs');
-let webpack = require('webpack');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const fs = require('fs');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 
 let basePath = path.join(__dirname, '../');
 
@@ -49,16 +51,17 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader"
+        loader: ExtractTextPlugin.extract("css-loader")
       },
       {
         test: /\.scss$/,
-        loader: "style-loader!css-loader!sass-loader"
+        loader: ExtractTextPlugin.extract({use: [{loader: "css-loader"}, {loader: "sass-loader"}]})
       }
     ]
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new ExtractTextPlugin("css/[name].[hash].css"),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
