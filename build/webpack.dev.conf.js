@@ -34,7 +34,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     index: 'html/demo.html'
   },
   plugins: [
-    new UglifyJSPlugin(),
     new webpack.DefinePlugin({
       'process.env': require('../config/dev.env')
     }),
