@@ -2,8 +2,7 @@ let path = require('path');
 let fs = require('fs');
 let webpack = require('webpack');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
-let UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-let CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 let basePath = path.join(__dirname, '../');
 
@@ -40,12 +39,7 @@ module.exports = {
   entry: entrys,
   output: {
     path: path.resolve(basePath, 'dist'),
-    filename: 'js/[name].[chunkhash].js'
-  },
-  devServer: {
-    contentBase: path.join(basePath, "dist_dev"),
-    port: 9000,
-    index: 'html/demo.html'
+    filename: 'js/[name].[hash].js'
   },
   module: {
     rules: [
@@ -64,18 +58,18 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
     }),
-    new UglifyJSPlugin(),
-    new CleanWebpackPlugin(
-      ['dist/js/*','dist/css/*'],
+    // copy custom static assets
+    new CopyWebpackPlugin([
       {
-        root: basePath,
-        verbose: true,
-        dry: false
+        from: path.resolve(__dirname, '../static'),
+        to: 'static',
+        ignore: ['.*']
       }
-    )
+    ])
   ].concat(htmlPlugins)
 }
