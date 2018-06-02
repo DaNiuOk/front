@@ -5,11 +5,13 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 let UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 let CleanWebpackPlugin = require('clean-webpack-plugin');
 
+let basePath = path.join(__dirname, '../');
+
 // 根据html遍历入口
 let entrys = {};
 let htmlPlugins = [];
-let htmlUrl = path.join(__dirname, 'src/html');
-let jsBasePath = path.join(__dirname, 'src/js');
+let htmlUrl = path.join(basePath, 'src/html');
+let jsBasePath = path.join(basePath, 'src/js');
 let result = fs.readdirSync(htmlUrl);
 result = (result instanceof Array) ? result : [];
 result.forEach((item) => {
@@ -20,11 +22,11 @@ result.forEach((item) => {
       fs.statSync(jsPath);
       entrys[pageName] = `./src/js/${pageName}.js`;
     } catch (ex) {
-      entrys[pageName] = path.join(__dirname, 'index.js');
+      entrys[pageName] = path.join(basePath, 'index.js');
     }
     htmlPlugins.push(new HtmlWebpackPlugin({
       filename: `html/${pageName}.html`,
-      template: path.resolve(__dirname, `src/html/${pageName}.html`),
+      template: path.resolve(basePath, `src/html/${pageName}.html`),
       inject  : 'body',
       minify:{
         collapseWhitespace: true,
@@ -37,11 +39,11 @@ module.exports = {
   mode: 'none',
   entry: entrys,
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(basePath, 'dist'),
     filename: 'js/[name].[chunkhash].js'
   },
   devServer: {
-    contentBase: path.join(__dirname, "dist_dev"),
+    contentBase: path.join(basePath, "dist_dev"),
     port: 9000,
     index: 'html/demo.html'
   },
@@ -70,7 +72,7 @@ module.exports = {
     new CleanWebpackPlugin(
       ['dist/js/*','dist/css/*'],
       {
-        root: __dirname,
+        root: basePath,
         verbose: true,
         dry: false
       }
