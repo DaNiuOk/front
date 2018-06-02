@@ -32,7 +32,13 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       poll: false,
     },
     index: 'html/demo.html'
-  }
+  },
+  plugins: [
+    new UglifyJSPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': require('../config/dev.env')
+    }),
+  ]
 })
 const createNotifierCallback = () => {
   const notifier = require('node-notifier')
